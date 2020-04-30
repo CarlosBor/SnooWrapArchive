@@ -3,6 +3,7 @@ var request = require('request');
 var fs = require('fs');
 var config = require('./config.js');
 
+const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
 //load username and password via config file.
 const snoo = new snoowrap({
     userAgent: 'Nodejs archiver (by /u/Levitz)',
@@ -25,6 +26,14 @@ const download = (url, path, callback) =>{
     })
 }
 
+function createfolder(path, callback){
+    fs.mkdir(path,(err)=>{
+        if(err){
+            if (err.code== 'EEXIST') callback(null);
+            else callback(err);
+        } else callback(null);
+    })
+}
 
 
 //Request example:
@@ -43,16 +52,21 @@ const download = (url, path, callback) =>{
 
 //'https://v.redd.it/unfglph3u0l41 feb3pn',
 
-   snoo.getSubreddit('anime_irl').getTop('month')
+function downloadTop(subName, timeframe){
+    snoo.getSubreddit(subName).getTop(timeframe)
     .map(post => [post.url, post.title])
     .then((urlArray)=>{
+        var date = new Date();
+        createfolder(subName, console.log);
         for (let i=0;i<urlArray.length;i++){
-            download(urlArray[i][0],"images/"+urlArray[i][1] + " Anime_IRL " + i, ()=>{
+            let title = subName + monthNames[date.getMonth()];
+            download(urlArray[i][0],subName+"/" + title + i, ()=>{
                 console.log("Downloaded file " + i + " from "+ urlArray[i][0]);
             })
         }
-    }); 
-
+    });  
+}
+downloadTop("Anime_IRL", "month");
 //Postname, Subreddit, Number.
 
 //snoo.getSubreddit('anime_irl').getTop('month').then(console.log);
@@ -62,3 +76,5 @@ const download = (url, path, callback) =>{
 /* download('https://i.redd.it/ao5lum6hqae31.jpg', 'test.jpg', ()=>{
     console.log("Worked");
 })  */
+
+// \/:"?<>*|
