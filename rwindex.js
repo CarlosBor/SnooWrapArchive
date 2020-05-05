@@ -54,19 +54,18 @@ function createfolder(path, callback){
 //'https://v.redd.it/unfglph3u0l41 feb3pn',
 
 
-function downloadTop(subName, timeframe){
-    snoo.getSubreddit(subName).getTop(timeframe)
-    .map(post => [post.url, post.title])
-    .then((urlArray)=>{
-        var date = new Date();
-        createfolder(subName, console.log);
-        for (let i=0;i<urlArray.length;i++){
-            let title = subName + monthNames[date.getMonth()];
-            download(urlArray[i][0],subName+"/" + title +" "+ (i+1), ()=>{
-                console.log("Downloaded file " + i + " from "+ urlArray[i][0]);
-            })
-        }
-    });  
+async function downloadTop(subName, timeframe){
+    var posts = await snoo.getSubreddit(subName).getTop(timeframe);
+    urlTitle = posts.map(post => [post.url, post.title]);
+    console.log(urlTitle);
+    var date = new Date();
+    createfolder(subName, console.log);
+    for (let i=0;i<urlTitle.length;i++){
+        let title = subName + monthNames[date.getMonth()];
+        download(urlTitle[i][0],subName+"/" + title +" "+ (i+1), ()=>{
+            console.log("Downloaded file " + i + " from "+ urlTitle[i][0]);
+        })
+    }
 }
 downloadTop("dankmemes", "month");
 //Postname, Subreddit, Number.
@@ -74,3 +73,5 @@ downloadTop("dankmemes", "month");
 //snoo.getSubreddit('anime_irl').getTop('month').then(console.log);
 //post.title
 //array order is same as ranking order in top.
+
+// \/:"?<>*|
