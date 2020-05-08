@@ -16,3 +16,18 @@ ws.onmessage = function (event){
 ws.onclose = function() {
     console.log("Connection is closed...");
 }
+
+window.onload = function () {
+    console.log("HM");
+    document.getElementById('commandInput').addEventListener("click",logger);
+    //.addEventListener("keydown",function(e){
+    //console.log(e);
+/*     if(e.keyCode == 13){
+     ws.send(document.getElementById('commandInput').value);
+    }  */
+};
+
+  function logger(e){
+    alert("What");
+  }
+  
