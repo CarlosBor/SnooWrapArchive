@@ -18,7 +18,7 @@ ws.onclose = function() {
 
 function logger(e){
      if(e.keyCode == 13){
-        ws.send(document.getElementById('commandInput').value);
+        ws.send("inputBox" + " " + document.getElementById('commandInput').value +" " + document.getElementById('subTime').value);
     }  
   }
 

@@ -2,6 +2,7 @@ var snoowrap = require('snoowrap');
 var request = require('request');
 var fs = require('fs');
 var config = require('../config/config.js');
+var fileIO = require('../js/fileIO.js');
 
 const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
 //load username and password via config file.
@@ -87,9 +88,14 @@ const wss = new WebSocketServer({ port: 8081 });
 wss.on('connection', ((ws) => {
     ws.on('message', (message) => {
         message = message.split(" ");
-        console.log(message);
-        if (message[0] == "archive"){
-            downloadTop(message[1],message[2]);
+        if (message[0] == "inputBox"){
+            //fileIO.writeAsJson("subList", [message[1],message[2]]);
+            console.log("say whaaaat");
+            console.log(fileIO.readJson("subList"));
+        }
+        if (message[0] == "json"){
+            //console.log(fileIO);
+            fileIO.writeAsJson("Testing", message);
         }
     });
     ws.on('end', () => {
