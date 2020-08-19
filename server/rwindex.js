@@ -4,7 +4,7 @@ var fs = require('fs');
 var config = require('../config/config.js');
 var fileIO = require('../js/fileIO.js');
 
-const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+const monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November", "December"];
 //load username and password via config file.
 const snoo = new snoowrap({
     userAgent: 'Nodejs archiver (by /u/Levitz)',
@@ -14,9 +14,10 @@ const snoo = new snoowrap({
     password: config.password,
   });
 
+//Downloads a single piece of media to the path from the url.
 const download = (url, path, callback) =>{
     request.head(url, (err, res, body)=>{
-        //Regex to get the trailing .jpg/.png from the url, returns if format is too long (not an image)
+        //Regex to get the trailing .jpg/.png from the url, returns(stops the function) if format is too long (not an image)
         let regex = /.*\/(.*)/;
         let extension = "."+regex.exec(res.headers['content-type'])[1];
         if(extension.length>5){
@@ -27,7 +28,7 @@ const download = (url, path, callback) =>{
         .on('close', callback);
     })
 }
-
+//Simply makes a folder, proper way is to try it and skip if error happens, apparently.
 function createfolder(path, callback){
     fs.mkdir(path,(err)=>{
         if(err){
@@ -54,7 +55,7 @@ function createfolder(path, callback){
 
 //'https://v.redd.it/unfglph3u0l41 feb3pn',
 
-
+//TRIES to download the top 25 media from that timeframe.
 async function downloadTop(subName, timeframe){
     var posts = await snoo.getSubreddit(subName).getTop(timeframe);
     urlTitle = posts.map(post => [post.url, post.title]);
@@ -91,7 +92,9 @@ wss.on('connection', ((ws) => {
         if (message[0] == "inputBox"){
             //fileIO.writeAsJson("subList", [message[1],message[2]]);
             console.log("say whaaaat");
-            console.log(fileIO.readJson("subList"));
+            fileIO.readJson("Testing", function(err, data){
+                console.log(data);
+            })
         }
         if (message[0] == "json"){
             //console.log(fileIO);

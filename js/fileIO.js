@@ -4,6 +4,7 @@ var fs = require("fs");
 ////// Writing JSON File ///////
 ////////////////////////////////
 async function writeAsJson(filename, data){
+    //Returns error the first time if file doesn't exist, yet creates the file.
     var fileData = await readJson(filename);
     console.log(fileData);
     data = JSON.stringify(data);
@@ -12,12 +13,13 @@ async function writeAsJson(filename, data){
     });
 }
 
-async function readJson(filename){
+async function readJson(filename, callback){
         fs.readFile(filename, (err, data)=>{
         if (err) throw err;
         data = JSON.parse(data);
-        return data;
-    })}
+        callback(null,data);
+    })};
+
 
 module.exports.writeAsJson = writeAsJson;
 module.exports.readJson = readJson;
@@ -25,18 +27,9 @@ module.exports.readJson = readJson;
 //writeAsJson("Testing",[1,2,3,4]);
 //readJson("Testing");
 
-//readJson doesn't return promises properly, check following example:
+/*
+El problema era que estaba intentando usar return.
+La mejor opcion es usar mi propio callback para
+continuar la ejecucion del proceso */
 
-async function firstAsync() {
-    let promise = new Promise((res, rej) => {
-        setTimeout(() => res("Now it's done!"), 1000)
-    });
-
-    // wait until the promise returns us a value
-    let result = await promise; 
-  
-    // "Now it's done!"
-    console.log(result); 
-    }
-
-firstAsync();
+//https://stackoverflow.com/questions/10058814/get-data-from-fs-readfile
