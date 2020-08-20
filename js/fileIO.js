@@ -5,21 +5,53 @@ var fs = require("fs");
 ////////////////////////////////
 async function writeAsJson(filename, data){
     //Returns error the first time if file doesn't exist, yet creates the file.
-    var fileData = await readJson(filename);
-    console.log(fileData);
-    data = JSON.stringify(data);
-    fs.writeFile(filename, data, (err)=>{
+    try{
+        var fileData = await readJson(filename);
+        fileData.push(data);
+    }
+    catch (e){
+        //Mirar si hay otros errores
+        console.log("File doesn't exist, creating...");
+        fileData = [data];
+    } 
+    fileData = JSON.stringify(fileData);
+    console.log("fileData: ",fileData);
+    fs.writeFile(filename, fileData, (err)=>{
         if (err) throw err;
     });
 }
 
-async function readJson(filename, callback){
-        fs.readFile(filename, (err, data)=>{
-        if (err) throw err;
-        data = JSON.parse(data);
-        callback(null,data);
-    })};
-
+async function readJson(filename){
+    return new Promise((resolve, reject) => {
+            fs.readFile(filename, (err,data)=>{
+                if (err){
+                    if (err.code === 'ENOENT'){
+                        console.log("File doesn't exist, creating...");
+                        data = "[]";
+                        fs.writeFile(filename, data,(err)=>{
+                            if (err) throw err;
+                        })
+                    }else{
+                        throw err;
+                    }
+                }
+                console.log("wait what", data);
+                data = JSON.parse(data);
+                resolve(data);
+            })
+        })
+    };
+    
+    /*
+    async function readJson(filename, callback){
+            fs.readFile(filename, (err, data)=>{
+                if (err) throw err;
+                data = JSON.parse(data);
+                console.log("Read data:" , data);
+                callback(null,data);
+            })
+        };
+    */
 
 module.exports.writeAsJson = writeAsJson;
 module.exports.readJson = readJson;

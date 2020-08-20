@@ -18,7 +18,14 @@ ws.onclose = function() {
 
 function logger(e){
      if(e.keyCode == 13){
-        ws.send("inputBox" + " " + document.getElementById('commandInput').value +" " + document.getElementById('subTime').value);
+         console.log("Hm");
+         dataObject = new Object();
+         dataObject.type = "inputBox",
+         dataObject.subReddit = document.getElementById('commandInput').value,
+         dataObject.timeframe = document.getElementById('subTime').value;
+         dataObject = JSON.stringify(dataObject);
+         ws.send(dataObject);
+        //ws.send("inputBox" + " " + document.getElementById('commandInput').value +" " + document.getElementById('subTime').value);
     }  
   }
 

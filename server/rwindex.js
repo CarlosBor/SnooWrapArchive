@@ -88,13 +88,23 @@ const WebSocketServer = require('ws').Server
 const wss = new WebSocketServer({ port: 8081 });
 wss.on('connection', ((ws) => {
     ws.on('message', (message) => {
-        message = message.split(" ");
-        if (message[0] == "inputBox"){
-            //fileIO.writeAsJson("subList", [message[1],message[2]]);
-            console.log("say whaaaat");
+        //Debugging
+        console.log("raw input", message);
+        //En lugar de enviar un maldito string, lo mismo mejor envio un objeto.
+        //Si es texto puro sale por consola, si es un objeto se procede a parsear.
+        try{
+            message = JSON.parse(message)
+        }catch{
+            console.log(message);
+            return;
+        };
+        if (message["type"] == "inputBox"){
+            fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]]);
+            /*
             fileIO.readJson("Testing", function(err, data){
                 console.log(data);
             })
+            */
         }
         if (message[0] == "json"){
             //console.log(fileIO);

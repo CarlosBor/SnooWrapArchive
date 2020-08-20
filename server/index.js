@@ -53,7 +53,7 @@ function createfolder(path, callback){
 
 //'https://v.redd.it/unfglph3u0l41 feb3pn',
 
-
+//
 function downloadTop(subName, timeframe){
     snoo.getSubreddit(subName).getTop(timeframe)
     .map(post => [post.url, post.title])
