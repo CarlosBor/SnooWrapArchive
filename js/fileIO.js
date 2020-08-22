@@ -3,6 +3,7 @@ var fs = require("fs");
 ////////////////////////////////
 ////// Writing JSON File ///////
 ////////////////////////////////
+/*
 async function writeAsJson(filename, data){
     //Returns error the first time if file doesn't exist, yet creates the file.
     try{
@@ -20,6 +21,30 @@ async function writeAsJson(filename, data){
         if (err) throw err;
     });
 }
+*/
+
+async function writeAsJson(filename, dataToWrite){
+    return new Promise((resolve, reject) =>{
+            readJson(filename)
+            .then(function(fileData){
+                dataToWrite.push(fileData);
+            })
+            .catch(function(){
+                //Mirar si hay otros errores
+                console.log("File doesn't exist, creating...");
+                dataToWrite = [dataToWrite];
+            })
+            .then(function(){
+            dataToWrite = JSON.stringify(dataToWrite);
+            console.log("dataToWrite: ", dataToWrite);
+            fs.writeFile(filename, dataToWrite, (err)=>{
+                if (err) throw err;
+                console.log("Write Succesful");
+                resolve();
+            });
+        });
+    })
+}
 
 async function readJson(filename){
     return new Promise((resolve, reject) => {
@@ -35,15 +60,14 @@ async function readJson(filename){
                         throw err;
                     }
                 }
-                console.log("wait what", data);
                 data = JSON.parse(data);
                 resolve(data);
             })
         })
     };
     
-    /*
-    async function readJson(filename, callback){
+    
+    async function readJsonCallback(filename, callback){
             fs.readFile(filename, (err, data)=>{
                 if (err) throw err;
                 data = JSON.parse(data);
@@ -51,10 +75,11 @@ async function readJson(filename){
                 callback(null,data);
             })
         };
-    */
+    
 
 module.exports.writeAsJson = writeAsJson;
 module.exports.readJson = readJson;
+module.exports.readJsonCallback = readJsonCallback;
 
 //writeAsJson("Testing",[1,2,3,4]);
 //readJson("Testing");
