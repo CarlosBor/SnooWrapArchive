@@ -9,9 +9,10 @@ ws.onerror = function (err){
 }
 
 ws.onmessage = function (message){
-    //Debugging
+    /*Debugging
     console.log("Raw input: ", message);
     console.log("message data: ", message.data);
+    */
     //Puedo parsearlo de manera similar a cliente => servidor
     
     try{
@@ -21,7 +22,6 @@ ws.onmessage = function (message){
         return;
     };
     if (message=="updateSubs"){
-        console.log("Llega a esto");
         refreshSubs(message["subInfo"]);
     }
 };
@@ -32,7 +32,6 @@ ws.onclose = function() {
 
 function logger(e){
      if(e.keyCode == 13){
-         console.log("Hm");
          dataObject = new Object();
          dataObject.type = "inputBox",
          dataObject.subReddit = document.getElementById('commandInput').value,

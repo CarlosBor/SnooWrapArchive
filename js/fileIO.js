@@ -22,22 +22,43 @@ async function writeAsJson(filename, data){
     });
 }
 */
+//Streamlines sending messages a bit.
+class JSONableMessage {
+    constructor(type, content) {
+        if(content===undefined){
+            let payload = JSON.parse(type);
+            this.type = payload[0];
+            this.content = payload[1];
+        }else{
+            this.type = type;
+            this.content = content;
+        }
+    }
+    toJSON(){
+        return (JSON.stringify([this.type, this.content]));
+    }
+    parseJSON(string){
+        payload = JSON.parse(string);
+        this.type = payload[0];
+        this.content = payload[1];
+    }
+  }
 
 async function writeAsJson(filename, dataToWrite){
     return new Promise((resolve, reject) =>{
             readJson(filename)
             .then(function(fileData){
-                dataToWrite.push(fileData);
+                fileData.push(dataToWrite);
+                return fileData
             })
-            .catch(function(){
+            .catch(function(fileData){
                 //Mirar si hay otros errores
                 console.log("File doesn't exist, creating...");
-                dataToWrite = [dataToWrite];
+                fileData = [dataToWrite];
             })
-            .then(function(){
-            dataToWrite = JSON.stringify(dataToWrite);
-            console.log("dataToWrite: ", dataToWrite);
-            fs.writeFile(filename, dataToWrite, (err)=>{
+            .then(function(fileData){
+            fileData = JSON.stringify(fileData);
+            fs.writeFile(filename, fileData, (err)=>{
                 if (err) throw err;
                 console.log("Write Succesful");
                 resolve();
@@ -71,7 +92,6 @@ async function readJson(filename){
             fs.readFile(filename, (err, data)=>{
                 if (err) throw err;
                 data = JSON.parse(data);
-                console.log("Read data:" , data);
                 callback(null,data);
             })
         };

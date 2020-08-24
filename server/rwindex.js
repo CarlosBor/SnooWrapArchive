@@ -103,13 +103,10 @@ wss.on('connection', ((ws) => {
             //tengo que hacer esto
             fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
             .then(function(){
-            //THEN esto
             dataObject = new Object();
             dataObject.type = "updateSubs";
-            //THEN esto
             fileIO.readJsonCallback("archiveData", function(err, data){
                 dataObject = JSON.stringify(data);
-                //THEN esto
                 console.log(dataObject);
                 ws.send(dataObject);
             })
