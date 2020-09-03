@@ -100,7 +100,7 @@ async function readJson(filename){
 module.exports.writeAsJson = writeAsJson;
 module.exports.readJson = readJson;
 module.exports.readJsonCallback = readJsonCallback;
-
+module.exports.JSONableMessage = JSONableMessage;
 //writeAsJson("Testing",[1,2,3,4]);
 //readJson("Testing");
 

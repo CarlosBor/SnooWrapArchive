@@ -94,7 +94,6 @@ wss.on('connection', ((ws) => {
         //Si es texto puro sale por consola, si es un objeto se procede a parsear.
         try{
             message = JSON.parse(message)
-            console.log("Si que parsea");
         }catch{
             console.log(message);
             return;
@@ -103,11 +102,9 @@ wss.on('connection', ((ws) => {
             //tengo que hacer esto
             fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
             .then(function(){
-            dataObject = new Object();
-            dataObject.type = "updateSubs";
             fileIO.readJsonCallback("archiveData", function(err, data){
-                dataObject = JSON.stringify(data);
-                console.log(dataObject);
+                dataObject = new fileIO.JSONableMessage("updateSubs", data);
+                dataObject = dataObject.toJSON();
                 ws.send(dataObject);
             })
             })

@@ -29,3 +29,15 @@ body{
 #archivedSubsList{
     color:#999999;
 }
+
+.subListing{
+    display:flex;
+}
+
+.subNameDiv{
+    width:200px;
+}
+
+.timeFrameDiv{
+    width:200px;
+}

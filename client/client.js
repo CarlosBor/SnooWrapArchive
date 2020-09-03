@@ -1,4 +1,27 @@
 var ws = new WebSocket("ws://127.9.9.1:8081");
+
+//Dirty class import
+class JSONableMessage {
+    constructor(type, content) {
+        if(content===undefined){
+            let payload = JSON.parse(type);
+            this.type = payload[0];
+            this.content = payload[1];
+        }else{
+            this.type = type;
+            this.content = content;
+        }
+    }
+    toJSON(){
+        return (JSON.stringify([this.type, this.content]));
+    }
+    parseJSON(string){
+        payload = JSON.parse(string);
+        this.type = payload[0];
+        this.content = payload[1];
+    }
+  }
+
 ws.onopen = function(event){
     console.log("Connection open ");
     ws.send("Hello server");
@@ -17,13 +40,23 @@ ws.onmessage = function (message){
     
     try{
         message = JSON.parse(message.data)
+        console.log(message, "This is the parsed data");
     }catch{
         console.log(message);
+        console.log("A hell of a catch");
         return;
     };
-    if (message=="updateSubs"){
-        refreshSubs(message["subInfo"]);
+    try{
+        dataObject = new JSONableMessage(message[0], message[1]);
+        console.log(dataObject);
+    }catch{
+        console.log("Couldn't turn into JSONableMessage");
     }
+
+    if(dataObject.type == "updateSubs"){
+        refreshSubs(dataObject.content);
+    }
+
 };
 
 ws.onclose = function() {
@@ -42,14 +75,16 @@ function logger(e){
     }  
   }
 
+//Usar esto para poblar la pagina al cargar
 function refreshSubs(subInfo){
     /* [
         [Subname, timespan]
         [Subname, timespan]
     ]
     */
+   document.querySelector("#archivedSubsList").innerHTML = "";
    subListing = document.createElement("div");
-   for(i=0; i++; i<subInfo.length){
+   for(i=0; i<subInfo.length; i++){
         rowDiv = document.createElement("div");
         rowDiv.classList.add("subListing");
         subNameDiv = document.createElement("div");
@@ -57,7 +92,7 @@ function refreshSubs(subInfo){
         subNameDiv.innerHTML = subInfo[i][0];
         timeFrameDiv = document.createElement("div");
         timeFrameDiv.classList.add("timeFrameDiv");
-        timeFrameDiv.innerHTML = subInfo[i][0];
+        timeFrameDiv.innerHTML = subInfo[i][1];
         removeDiv = document.createElement("div");
         removeDiv.classList.add("removeDiv");
         rowDiv.appendChild(subNameDiv);
