@@ -41,3 +41,10 @@ body{
 .timeFrameDiv{
     width:200px;
 }
+
+.removeDiv{
+    width:12px;
+    background-color:red;
+    border-radius:5px;
+    border:solid;
+}

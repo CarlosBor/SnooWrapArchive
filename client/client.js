@@ -95,12 +95,22 @@ function refreshSubs(subInfo){
         timeFrameDiv.innerHTML = subInfo[i][1];
         removeDiv = document.createElement("div");
         removeDiv.classList.add("removeDiv");
+        removeDiv.setAttribute("id", subInfo[i][0]);
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);
         rowDiv.appendChild(removeDiv);
         subListing.appendChild(rowDiv);
+        //Hay que asignar el evento de removeSub al div para que actue en click
    }
    document.querySelector("#archivedSubsList").appendChild(subListing);
+}
+
+function removeSub(subName){
+    dataObject = new Object();
+    dataObject.type = "removeSub",
+    dataObject.content = subName;
+    dataObject = JSON.stringify(dataObject);
+    ws.send(dataObject);
 }
 
 window.onload = function () {

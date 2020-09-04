@@ -98,8 +98,8 @@ wss.on('connection', ((ws) => {
             console.log(message);
             return;
         };
+        //Caja de texto
         if (message["type"] == "inputBox"){
-            //tengo que hacer esto
             fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
             .then(function(){
             fileIO.readJsonCallback("archiveData", function(err, data){
@@ -115,6 +115,28 @@ wss.on('connection', ((ws) => {
             ws.send(dataObject);
             */
         }
+        //Boton de quitar subreddit
+        if(message["type"] == "removeSub"){
+            data = fileIO.readJson("ArchiveData")
+            .then(data => {
+                for (i=0;i<data.length;i++){
+                    if (data[i][0]==message["content"]){
+                        data.splice(i,1);
+                    }
+            }
+            //Envia el paquete nuevo para refrescar
+            dataObject = new fileIO.JSONableMessage("updateSubs", data);
+            dataObject = dataObject.toJSON();
+            ws.send(dataObject);
+            data = JSON.stringify(data);
+            //Escribe directamente en el archivo el resultado
+            fs.writeFile("ArchiveData", data, (err)=>{
+                if (err) throw err;
+                console.log("Complete rewrite Succesful");
+            });
+        });
+        }
+
         if (message[0] == "json"){
             //console.log(fileIO);
             fileIO.writeAsJson("Testing", message);
@@ -124,4 +146,9 @@ wss.on('connection', ((ws) => {
         console.log('Connection ended...');
     });
     ws.send('Hello Client');
+    fileIO.readJsonCallback("archiveData", function(err, data){
+        dataObject = new fileIO.JSONableMessage("updateSubs", data);
+        dataObject = dataObject.toJSON();
+        ws.send(dataObject);
+    })
 }));
