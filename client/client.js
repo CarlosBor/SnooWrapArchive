@@ -82,10 +82,12 @@ function refreshSubs(subInfo){
     ]
     */
    document.querySelector("#archivedSubsList").innerHTML = "";
+   //Parent div
    subListing = document.createElement("div");
    for(i=0; i<subInfo.length; i++){
         rowDiv = document.createElement("div");
         rowDiv.classList.add("subListing");
+        //Create div => add class to div => add content to div *3
         subNameDiv = document.createElement("div");
         subNameDiv.classList.add("subNameDiv");
         subNameDiv.innerHTML = subInfo[i][0];
@@ -94,13 +96,13 @@ function refreshSubs(subInfo){
         timeFrameDiv.innerHTML = subInfo[i][1];
         removeDiv = document.createElement("div");
         removeDiv.classList.add("removeDiv");
+        //removediv doesn't have content but an ID and eventhandler instead
         removeDiv.setAttribute("id", subInfo[i][0]);
         removeDiv.addEventListener("click", function(){removeSub(this.id)});
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);
         rowDiv.appendChild(removeDiv);
         subListing.appendChild(rowDiv);
-        //Hay que asignar el evento de removeSub al div para que actue en click
    }
    document.querySelector("#archivedSubsList").appendChild(subListing);
 }

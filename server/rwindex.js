@@ -82,15 +82,12 @@ async function downloadTop(subName, timeframe){
 //Server Logic//
 ////////////////
 
-//'use strict';
-
 const WebSocketServer = require('ws').Server
 const wss = new WebSocketServer({ port: 8081 });
 wss.on('connection', ((ws) => {
     ws.on('message', (message) => {
         //Debugging
         console.log("Raw input", message);
-        //En lugar de enviar un maldito string, lo mismo mejor envio un objeto.
         //Si es texto puro sale por consola, si es un objeto se procede a parsear.
         try{
             message = JSON.parse(message)
@@ -102,18 +99,12 @@ wss.on('connection', ((ws) => {
         if (message["type"] == "inputBox"){
             fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
             .then(function(){
-            fileIO.readJsonCallback("archiveData", function(err, data){
-                dataObject = new fileIO.JSONableMessage("updateSubs", data);
-                dataObject = dataObject.toJSON();
-                ws.send(dataObject);
+                fileIO.readJsonCallback("archiveData", function(err, data){
+                    dataObject = new fileIO.JSONableMessage("updateSubs", data);
+                    dataObject = dataObject.toJSON();
+                    ws.send(dataObject);
+                })
             })
-            })
-
-            /*
-            dataObject.subInfo = fileIO.readJson("archiveData");
-            dataObject = JSON.stringify(dataObject);
-            ws.send(dataObject);
-            */
         }
         //Boton de quitar subreddit
         if(message["type"] == "removeSub"){
@@ -134,18 +125,14 @@ wss.on('connection', ((ws) => {
                 if (err) throw err;
                 console.log("Complete rewrite Succesful");
             });
-        });
-        }
-
-        if (message[0] == "json"){
-            //console.log(fileIO);
-            fileIO.writeAsJson("Testing", message);
+            });
         }
     });
     ws.on('end', () => {
         console.log('Connection ended...');
     });
     ws.send('Hello Client');
+    //Refresca la pagina con los subreddits añadidos al abrir
     fileIO.readJsonCallback("archiveData", function(err, data){
         dataObject = new fileIO.JSONableMessage("updateSubs", data);
         dataObject = dataObject.toJSON();
