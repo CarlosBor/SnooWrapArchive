@@ -75,7 +75,6 @@ function logger(e){
     }  
   }
 
-//Usar esto para poblar la pagina al cargar
 function refreshSubs(subInfo){
     /* [
         [Subname, timespan]
@@ -96,6 +95,7 @@ function refreshSubs(subInfo){
         removeDiv = document.createElement("div");
         removeDiv.classList.add("removeDiv");
         removeDiv.setAttribute("id", subInfo[i][0]);
+        removeDiv.addEventListener("click", function(){removeSub(this.id)});
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);
         rowDiv.appendChild(removeDiv);
