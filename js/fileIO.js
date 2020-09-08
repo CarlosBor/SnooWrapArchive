@@ -47,6 +47,7 @@ async function writeAsJson(filename, dataToWrite){
             });
         });
     })
+    
 }
 
 async function readJson(filename){
