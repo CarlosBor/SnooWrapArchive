@@ -56,7 +56,9 @@ ws.onmessage = function (message){
     if(dataObject.type == "updateSubs"){
         refreshSubs(dataObject.content);
     }
-
+    if(dataObject.type == "errorToClient"){
+        console.log(dataObject.content);
+    }
 };
 
 ws.onclose = function() {
@@ -71,7 +73,6 @@ function logger(e){
          dataObject.timeframe = document.getElementById('subTime').value;
          dataObject = JSON.stringify(dataObject);
          ws.send(dataObject);
-        //ws.send("inputBox" + " " + document.getElementById('commandInput').value +" " + document.getElementById('subTime').value);
     }  
   }
 
@@ -97,7 +98,7 @@ function refreshSubs(subInfo){
         removeDiv = document.createElement("div");
         removeDiv.classList.add("removeDiv");
         //removediv doesn't have content but an ID and eventhandler instead
-        removeDiv.setAttribute("id", subInfo[i][0]);
+        removeDiv.setAttribute("id", JSON.stringify([subInfo[i][0], subInfo[i][1]]));
         removeDiv.addEventListener("click", function(){removeSub(this.id)});
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);

@@ -3,6 +3,8 @@ var request = require('request');
 var fs = require('fs');
 var config = require('../config/config.js');
 var fileIO = require('../js/fileIO.js');
+const Mongo = require('mongodb');
+const DBfunctions = require('../js/DBfunctions.js');
 
 const monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November", "December"];
 //load username and password via config file.
@@ -84,7 +86,16 @@ async function downloadTop(subName, timeframe){
 
 const WebSocketServer = require('ws').Server
 const wss = new WebSocketServer({ port: 8081 });
+
+//Database
+MongoClient = Mongo.MongoClient;
+const uri = config.dburi;
+const client = new MongoClient(uri, { useNewUrlParser: true });
+//MongoDB connection.
+//client.connect();
+
 wss.on('connection', ((ws) => {
+    client.connect();
     ws.on('message', (message) => {
         //Debugging
         console.log("Raw input", message);
@@ -97,6 +108,7 @@ wss.on('connection', ((ws) => {
         };
         //Caja de texto
         if (message["type"] == "inputBox"){
+            DBfunctions.addToWatch(client, message["subReddit"], message["timeframe"]);
             fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
             .then(function(){
                 fileIO.readJsonCallback("archiveData", function(err, data){
@@ -108,6 +120,10 @@ wss.on('connection', ((ws) => {
         }
         //Boton de quitar subreddit
         if(message["type"] == "removeSub"){
+            subAndTime = JSON.parse(message["content"]);
+            console.log(subAndTime);
+            DBfunctions.removeFromWatch(client, subAndTime[0], subAndTime[1]);
+            //I have to redo how the UI works in sending info to remove the sub
             data = fileIO.readJson("ArchiveData")
             .then(data => {
                 for (i=0;i<data.length;i++){

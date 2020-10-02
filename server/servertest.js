@@ -3,7 +3,7 @@ var request = require('request');
 var fs = require('fs');
 var config = require('../config/config.js');
 var fileIO = require('../js/fileIO.js');
-const util = require('util')
+const util = require('util');
 
 const monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November", "December"];
 //load username and password via config file.
@@ -56,7 +56,21 @@ const download = (url, path, callback) =>{
         .on('close', callback);
     })
 }
+try{
+    snoo.getSubreddit('Anime_ssIRL').fetch().then(function(damn){
+        console.log(damn);
+    })
+}catch(err){
+    //Subreddit doesn't exist error
+}
+//else, do nothing
 
-snoo.getSubreddit('Anime_ssIRL').fetch().then(function(damn){
-    console.log(damn);
+//Have to modularize the writing of objects?
+fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
+.then(function(){
+    fileIO.readJsonCallback("archiveData", function(err, data){
+        dataObject = new fileIO.JSONableMessage("updateSubs", data);
+        dataObject = dataObject.toJSON();
+        ws.send(dataObject);
+    })
 })
