@@ -108,12 +108,55 @@ function refreshSubs(subInfo){
    document.querySelector("#archivedSubsList").appendChild(subListing);
 }
 
+
+ function refreshSubsDB(subInfoDB){
+    /*
+    [
+    { subredditName: 'Test1', subredditTime: 'week' },
+    { subredditName: 'Test2', subredditTime: 'week' },
+    { subredditName: 'Test3', subredditTime: 'week' }
+    ]
+  */
+ document.querySelector("#archivedSubsList").innerHTML = "";
+   //Parent div
+   subListing = document.createElement("div");
+   for(i=0; i<subInfoDB.length; i++){
+        rowDiv = document.createElement("div");
+        rowDiv.classList.add("subListing");
+        //Create div => add class to div => add content to div *3
+        subNameDiv = document.createElement("div");
+        subNameDiv.classList.add("subNameDiv");
+        subNameDiv.innerHTML = subInfoDB[i].subredditName;
+        timeFrameDiv = document.createElement("div");
+        timeFrameDiv.classList.add("timeFrameDiv");
+        timeFrameDiv.innerHTML = subInfoDB[i].subredditTime;
+        removeDiv = document.createElement("div");
+        removeDiv.classList.add("removeDiv");
+        //removediv doesn't have content but an ID and eventhandler instead
+        //Check the result of this, then later add the removal functionality.
+        removeDiv.setAttribute("id", JSON.stringify(subInfoDB[i].subredditName, subInfoDB[i].subredditTime));
+        removeDiv.addEventListener("click", function(){removeSubDB(this.id)});
+        rowDiv.appendChild(subNameDiv);
+        rowDiv.appendChild(timeFrameDiv);
+        rowDiv.appendChild(removeDiv);
+        subListing.appendChild(rowDiv);
+   }
+   document.querySelector("#archivedSubsList").appendChild(subListing);
+}
+
 function removeSub(subName){
     dataObject = new Object();
     dataObject.type = "removeSub",
     dataObject.content = subName;
     dataObject = JSON.stringify(dataObject);
     ws.send(dataObject);
+}
+
+function removeSubDB(subId){
+    dataObject = new Object();
+    dataObject.type = "removeSub",
+    dataObject.content = subId;
+    
 }
 
 window.onload = function () {
