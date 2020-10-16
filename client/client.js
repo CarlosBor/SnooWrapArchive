@@ -54,7 +54,7 @@ ws.onmessage = function (message){
     }
 
     if(dataObject.type == "updateSubs"){
-        refreshSubs(dataObject.content);
+        refreshSubsDB(dataObject.content);
     }
     if(dataObject.type == "errorToClient"){
         console.log(dataObject.content);
@@ -134,7 +134,7 @@ function refreshSubs(subInfo){
         removeDiv.classList.add("removeDiv");
         //removediv doesn't have content but an ID and eventhandler instead
         //Check the result of this, then later add the removal functionality.
-        removeDiv.setAttribute("id", JSON.stringify(subInfoDB[i].subredditName, subInfoDB[i].subredditTime));
+        removeDiv.setAttribute("id", subInfoDB[i].subredditName + " " + subInfoDB[i].subredditTime);
         removeDiv.addEventListener("click", function(){removeSubDB(this.id)});
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);

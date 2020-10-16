@@ -29,14 +29,13 @@ async function removeFromWatch(client, subredditName, subredditTime){
     collection.deleteOne({subredditName : subredditName, subredditTime : subredditTime})
 }
 
-async function retrieveWatchedSubs(){
-    await client.connect();
+async function retrieveWatchedSubs(client){
     database = client.db("RedditArchive");
     collection = database.collection("watched_subs");
     //Do this, turn them into an array
     cursor = collection.find( {},{projection: { subredditName: 1, subredditTime: 1, _id: 0 }})
     array = await cursor.toArray();
-    console.log(array);
+    return(array);
     //Has to send the info to the UI and refresh
 }
 

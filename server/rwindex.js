@@ -95,7 +95,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 //client.connect();
 
 wss.on('connection', ((ws) => {
-    client.connect();
     ws.on('message', (message) => {
         //Debugging
         console.log("Raw input", message);
@@ -108,14 +107,12 @@ wss.on('connection', ((ws) => {
         };
         //Caja de texto
         if (message["type"] == "inputBox"){
-            DBfunctions.addToWatch(client, message["subReddit"], message["timeframe"]);
-            fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
+            DBfunctions.addToWatch(client, message["subReddit"], message["timeframe"])
             .then(function(){
-                fileIO.readJsonCallback("archiveData", function(err, data){
-                    dataObject = new fileIO.JSONableMessage("updateSubs", data);
-                    dataObject = dataObject.toJSON();
-                    ws.send(dataObject);
-                })
+                updatedSubs = DBfunctions.retrieveWatchedSubs(client);
+                dataObject = new fileIO.JSONableMessage("updateSubs", updatedSubs);
+                dataObject = dataObject.toJSON();
+                ws.send(dataObject);
             })
         }
         //Boton de quitar subreddit
@@ -148,9 +145,12 @@ wss.on('connection', ((ws) => {
         console.log('Connection ended...');
     });
     ws.send('Hello Client');
+    client.connect()
+    .then(() => DBfunctions.retrieveWatchedSubs(client))
     //Refresca la pagina con los subreddits añadidos al abrir
-    fileIO.readJsonCallback("archiveData", function(err, data){
-        dataObject = new fileIO.JSONableMessage("updateSubs", data);
+    .then(function(result){
+        console.log(result)
+        dataObject = new fileIO.JSONableMessage("updateSubs", result);
         dataObject = dataObject.toJSON();
         ws.send(dataObject);
     })
