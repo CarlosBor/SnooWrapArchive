@@ -147,11 +147,11 @@ wss.on('connection', ((ws) => {
     ws.send('Hello Client');
     client.connect()
     .then(() => DBfunctions.retrieveWatchedSubs(client))
-    //Refresca la pagina con los subreddits añadidos al abrir
     .then(function(result){
-        console.log(result)
         dataObject = new fileIO.JSONableMessage("updateSubs", result);
-        dataObject = dataObject.toJSON();
-        ws.send(dataObject);
+        ws.send(dataObject.toJSON());
     })
 }));
+
+//TODO
+//Haz una unica funcion que refresque la pagina. Va a quedar mil veces mas limpio asi.
