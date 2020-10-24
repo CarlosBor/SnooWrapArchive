@@ -146,7 +146,7 @@ function refreshSubs(subInfo){
 
 function removeSub(subName){
     dataObject = new Object();
-    dataObject.type = "removeSub",
+    dataObject.type = "removeSub";
     dataObject.content = subName;
     dataObject = JSON.stringify(dataObject);
     ws.send(dataObject);
@@ -154,9 +154,10 @@ function removeSub(subName){
 
 function removeSubDB(subId){
     dataObject = new Object();
-    dataObject.type = "removeSub",
+    dataObject.type = "removeSub";
     dataObject.content = subId;
-    
+    dataObject = JSON.stringify(dataObject);
+    ws.send(dataObject);
 }
 
 window.onload = function () {

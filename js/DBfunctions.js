@@ -15,8 +15,7 @@ const uri = config.dburi;
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
 
-async function addToWatch(subredditName, subredditTime){
-    await client.connect();
+async function addToWatch(client, subredditName, subredditTime){
     database = client.db("RedditArchive");
     collection = database.collection("watched_subs");
     collection.insertOne({subredditName : subredditName, subredditTime : subredditTime})

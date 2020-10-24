@@ -114,31 +114,28 @@ wss.on('connection', ((ws) => {
                 dataObject = dataObject.toJSON();
                 ws.send(dataObject);
             })
+            .then(() => DBfunctions.retrieveWatchedSubs(client))
+            .then(function(result){
+                dataObject = new fileIO.JSONableMessage("updateSubs", result);
+                ws.send(dataObject.toJSON());
+            })
         }
         //Boton de quitar subreddit
         if(message["type"] == "removeSub"){
-            subAndTime = JSON.parse(message["content"]);
+            subAndTime = message["content"].split(" ");
             console.log(subAndTime);
-            DBfunctions.removeFromWatch(client, subAndTime[0], subAndTime[1]);
-            //I have to redo how the UI works in sending info to remove the sub
-            data = fileIO.readJson("ArchiveData")
-            .then(data => {
-                for (i=0;i<data.length;i++){
-                    if (data[i][0]==message["content"]){
-                        data.splice(i,1);
-                    }
-            }
-            //Envia el paquete nuevo para refrescar
-            dataObject = new fileIO.JSONableMessage("updateSubs", data);
-            dataObject = dataObject.toJSON();
-            ws.send(dataObject);
-            data = JSON.stringify(data);
-            //Escribe directamente en el archivo el resultado
-            fs.writeFile("ArchiveData", data, (err)=>{
-                if (err) throw err;
-                console.log("Complete rewrite Succesful");
-            });
-            });
+            DBfunctions.removeFromWatch(client, subAndTime[0], subAndTime[1])
+            .then(function(){
+                updatedSubs = DBfunctions.retrieveWatchedSubs(client);
+                dataObject = new fileIO.JSONableMessage("updateSubs", updatedSubs);
+                dataObject = dataObject.toJSON();
+                ws.send(dataObject);
+            })
+            .then(() => DBfunctions.retrieveWatchedSubs(client))
+            .then(function(result){
+                dataObject = new fileIO.JSONableMessage("updateSubs", result);
+                ws.send(dataObject.toJSON());
+            })
         }
     });
     ws.on('end', () => {
@@ -152,6 +149,3 @@ wss.on('connection', ((ws) => {
         ws.send(dataObject.toJSON());
     })
 }));
-
-//TODO
-//Haz una unica funcion que refresque la pagina. Va a quedar mil veces mas limpio asi.
