@@ -137,6 +137,19 @@ wss.on('connection', ((ws) => {
                 ws.send(dataObject.toJSON());
             })
         }
+        if(message["type"] == "downloadContent"){
+            
+
+            //This works to download all of the sub+week content from db
+            /*
+            DBfunctions.retrieveWatchedSubs(client)
+            .then(function(result){
+                for(i=0;i<result.length;i++){
+                    downloadTop(result[i].subredditName, result[i].subredditTime);
+                }
+            })
+            */
+        }
     });
     ws.on('end', () => {
         console.log('Connection ended...');

@@ -160,6 +160,16 @@ function removeSubDB(subId){
     ws.send(dataObject);
 }
 
+//Please god let this be temporary
+function dltest(){
+    console.log("Cheerio");
+    dataObject = new Object();
+    dataObject.type = "downloadContent",
+    dataObject = JSON.stringify(dataObject);
+    ws.send(dataObject);
+}
 window.onload = function () {
     document.getElementById('commandInput').addEventListener("keydown",logger);
+    //Please god let this be temporary
+    document.getElementById("DLTEST").addEventListener("click", dltest)
 };
