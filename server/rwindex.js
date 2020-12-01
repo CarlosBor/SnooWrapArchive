@@ -30,6 +30,7 @@ const download = (url, path, callback) =>{
         .on('close', callback);
     })
 }
+
 //Simply makes a folder, proper way is to try it and skip if error happens, apparently.
 function createfolder(path, callback){
     fs.mkdir(path,(err)=>{
@@ -136,19 +137,6 @@ wss.on('connection', ((ws) => {
                 dataObject = new fileIO.JSONableMessage("updateSubs", result);
                 ws.send(dataObject.toJSON());
             })
-        }
-        if(message["type"] == "downloadContent"){
-            
-
-            //This works to download all of the sub+week content from db
-            /*
-            DBfunctions.retrieveWatchedSubs(client)
-            .then(function(result){
-                for(i=0;i<result.length;i++){
-                    downloadTop(result[i].subredditName, result[i].subredditTime);
-                }
-            })
-            */
         }
     });
     ws.on('end', () => {

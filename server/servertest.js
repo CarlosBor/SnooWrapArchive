@@ -56,6 +56,7 @@ const download = (url, path, callback) =>{
         .on('close', callback);
     })
 }
+/*
 try{
     snoo.getSubreddit('Anime_ssIRL').fetch().then(function(damn){
         console.log(damn);
@@ -73,4 +74,13 @@ fileIO.writeAsJson("ArchiveData",[message["subReddit"], message["timeframe"]])
         dataObject = dataObject.toJSON();
         ws.send(dataObject);
     })
+})*/
+
+snoo.getSubreddit("anime_irl").getTop("week")
+.then(function(result){
+    //result.ups => amount of upvotes
+    //result.created_UTC => UNIX UTC timestamp
+    //result.id => ID
+    urlTitle = result.map(result => [result.ups, result.created_utc, result.id, result.subreddit]);
+    console.log(urlTitle);
 })

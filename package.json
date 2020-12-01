@@ -9,6 +9,7 @@
   "author": "Me",
   "license": "ISC",
   "dependencies": {
+    "md5": "^2.3.0",
     "mongodb": "^3.6.2",
     "snoowrap": "^1.21.0"
   }

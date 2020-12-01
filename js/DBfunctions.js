@@ -38,6 +38,13 @@ async function retrieveWatchedSubs(client){
     //Has to send the info to the UI and refresh
 }
 
+async function addimage(client,result){
+    database = client.db("RedditArchive");
+    collection = database.collection("images");
+    
+    //collection.insertOne({})
+}
+
 module.exports.addToWatch = addToWatch;
 module.exports.removeFromWatch = removeFromWatch;
 module.exports.retrieveWatchedSubs = retrieveWatchedSubs;
