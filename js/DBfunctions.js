@@ -29,6 +29,7 @@ async function removeFromWatch(client, subredditName, subredditTime){
 }
 
 async function retrieveWatchedSubs(client){
+    await client.connect();
     database = client.db("RedditArchive");
     collection = database.collection("watched_subs");
     //Do this, turn them into an array
@@ -45,9 +46,64 @@ async function addimage(client,result){
     //collection.insertOne({})
 }
 
+//Limpiar variables por dios.
+async function rankSubmission(client, infoArray){
+    await client.connect();
+    database = client.db("RedditArchive");
+    collection = database.collection("saved_submissions");
+    //Do this, turn them into an array
+    cursor = collection.find( {"display_name": infoArray[0], "timeframe": infoArray[3], score: {$gt:infoArray[2]}})
+    array = await cursor.toArray();
+    if(array.length<25){
+        //insert the post, if there are more than 25 posts for that sub and timeframe remove the last.
+        collection.insertOne({"display_name":infoArray[0], "post_url": infoArray[1], "score": infoArray[2], "timeframe": infoArray[3], "weekNo": infoArray[4], "mod5":infoArray[5]})
+        .then(async function(){
+            topsubm = collection.find({"display_name": infoArray[0], "timeframe": infoArray[3]}).sort({"score":1});
+            result = await topsubm.toArray();
+            if(result.length>15){
+                collection.deleteOne({_id : result[0]._id})
+            }
+            console.log(result);
+    })
+    return("Heyyy");
+}
+}
+
 module.exports.addToWatch = addToWatch;
 module.exports.removeFromWatch = removeFromWatch;
 module.exports.retrieveWatchedSubs = retrieveWatchedSubs;
+
+//[post.subreddit.display_name, post.url, post.score, timeframe, year, urlMD5];
+
+testArray = [    'funny',
+    'https://i.redd.it/kq0hcb2s23z51.jpg',
+    95819,
+    'week',
+    46,
+    '52bd6e5950704b94cf9cce21d902a96c']
+
+/*
+{
+    "display_name": "funny",
+    "post_url": "https://i.redd.it/kq0hcb2s23z51.jpg",
+    "score": 95828,
+    "timeframe": "week",
+    "weekNo": 46,
+    "MD5": "52bd6e5950704b94cf9cce21d902a96c"
+}
+*/
+
+rankSubmission(client, testArray).then(function(result){
+    console.log(result);
+})
+//console.log(rankSubmission("whoa", client));
 //retrieveWatchedSubs();
 //addToWatch("Anime_IRL", "week");
 //removeFromWatch("Anime_IRL", "week");
+
+//Given timeframe and subreddit
+//get the top 25, then build own top25 with the upvotes
+//I could just retrieve the data at specific points in time, but this is more interesting
+
+//[Anime_irl, "week"]
+
