@@ -2,9 +2,7 @@ var snoowrap = require('snoowrap');
 var request = require('request');
 var fs = require('fs');
 var config = require('../config/config.js');
-var fileIO = require('../js/fileIO.js');
 const Mongo = require('mongodb');
-const DBfunctions = require('../js/DBfunctions.js');
 var md5 = require('md5');
 
 Date.prototype.getISOWeek = function() {
@@ -87,45 +85,11 @@ async function downloadTop(subName, timeframe){
     }
 }
 
+//Gets the 25 top submissions from subName in the timeframe
 async function retrieveInfoTop(subName, timeframe){
     var posts = await snoo.getSubreddit(subName).getTop(timeframe);
     return [posts, timeframe];
 }
-
-
-const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({ port: 8081 });
-
-//Database
-MongoClient = Mongo.MongoClient;
-const uri = config.dburi;
-const client = new MongoClient(uri, { useNewUrlParser: true });
-
-
-
-async function main(){
-      try {
-        client.connect()
-        .then(() => DBfunctions.retrieveWatchedSubs(client))
-        .then(function(result){
-            for(i=0;i<result.length;i++){
-                retrieveInfoTop(result[i].subredditName, result[i].subredditTime) //The 4 subreddits, returns the posts and the timeframe
-                .then(function(infoTop){
-                    for (j=0; j<infoTop[0].length;j++){
-                        //Funcion que manda la informacion a la base de datos para que sea comparada y rankeada. rankSubmission.
-                        console.log(getRelevantInfo(infoTop[0][j], infoTop[1]))
-                    }
-                })
-            }
-        })
-      } catch (e) {
-          console.error(e);
-      } finally {
-          await client.close();
-      }
-  }
-  
-//main().catch(console.error);
 
 module.exports.retrieveInfoTop = retrieveInfoTop;
 module.exports.getRelevantInfo = getRelevantInfo;

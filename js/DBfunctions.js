@@ -1,20 +1,3 @@
-const Mongo = require('mongodb');
-var config = require('../config/config.js');
-//Collections:
-//Watched_Subs
-//2 fields, the watched subreddit and whether it's weekly, monthly or such
-//2 strings
-
-//Archives themselves
-//3 fields, subreddit name, the timing (june, first week of september...), and an array with the top25
-//2 strings, one array.
-
-//This would go into the server itself, here only for testing purposes.
-MongoClient = Mongo.MongoClient;
-const uri = config.dburi;
-const client = new MongoClient(uri, { useNewUrlParser: true });
-
-
 async function addToWatch(client, subredditName, subredditTime){
     database = client.db("RedditArchive");
     collection = database.collection("watched_subs");
@@ -29,7 +12,6 @@ async function removeFromWatch(client, subredditName, subredditTime){
 }
 
 async function retrieveWatchedSubs(client){
-    await client.connect();
     database = client.db("RedditArchive");
     collection = database.collection("watched_subs");
     //Do this, turn them into an array
@@ -39,16 +21,7 @@ async function retrieveWatchedSubs(client){
     //Has to send the info to the UI and refresh
 }
 
-async function addimage(client,result){
-    database = client.db("RedditArchive");
-    collection = database.collection("images");
-    
-    //collection.insertOne({})
-}
-
-//Limpiar variables por dios.
 async function rankSubmission(client, infoArray){
-    await client.connect();
     database = client.db("RedditArchive");
     collection = database.collection("saved_submissions");
     //Do this, turn them into an array
@@ -71,8 +44,6 @@ module.exports.removeFromWatch = removeFromWatch;
 module.exports.retrieveWatchedSubs = retrieveWatchedSubs;
 module.exports.rankSubmission = rankSubmission;
 
-//[post.subreddit.display_name, post.url, post.score, timeframe, year, urlMD5];
-
 /*
 {
     "display_name": "funny",
@@ -83,14 +54,3 @@ module.exports.rankSubmission = rankSubmission;
     "MD5": "52bd6e5950704b94cf9cce21d902a96c"
 }
 */
-
-//console.log(rankSubmission("whoa", client));
-//retrieveWatchedSubs();
-//addToWatch("Anime_IRL", "week");
-//removeFromWatch("Anime_IRL", "week");
-
-//Given timeframe and subreddit
-//get the top 25, then build own top25 with the upvotes
-//I could just retrieve the data at specific points in time, but this is more interesting
-
-//[Anime_irl, "week"]
