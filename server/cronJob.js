@@ -1,0 +1,33 @@
+var config = require('../config/config.js');
+const Mongo = require('mongodb');
+MongoClient = Mongo.MongoClient;
+const uri = config.dburi;
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+const DBfunctions = require('../js/DBfunctions.js');
+const model = require('../server/model.js');
+
+
+var CronJob = require('cron').CronJob;
+//Each hour, check the monitored subreddits in their respective timeframes and get their submissions, ranking them.
+
+var rankTheSubs = new CronJob('*/5 * * * * *', function() {
+    DBfunctions.retrieveWatchedSubs(client).then(function(result){//Fetches the subs watched from the database and their respective timeframes 
+      for(i=0;i<result.length;i++){
+        model.retrieveInfoTop(result[i].subredditName, result[i].subredditTime).then(function(infoTop){ //Gets the current top25 submissions from those subs and those timeframes
+          for (j=0; j<infoTop[0].length;j++){
+            DBfunctions.rankSubmission(client, model.getRelevantInfo(infoTop[0][j], infoTop[1]));
+          }
+        })
+      }
+    })
+}
+  , null, true, 'Europe/Madrid');
+
+//Each day, remove the submissions from the archives if they are not in the top25 score
+
+//Each day, download and organize the top25
+
+
+
+rankTheSubs.start();

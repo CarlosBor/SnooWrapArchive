@@ -117,7 +117,6 @@ async function main(){
                     }
                 })
             }
-
         })
       } catch (e) {
           console.error(e);
@@ -126,4 +125,7 @@ async function main(){
       }
   }
   
-main().catch(console.error);
+//main().catch(console.error);
+
+module.exports.retrieveInfoTop = retrieveInfoTop;
+module.exports.getRelevantInfo = getRelevantInfo;
