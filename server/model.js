@@ -93,3 +93,5 @@ async function retrieveInfoTop(subName, timeframe){
 
 module.exports.retrieveInfoTop = retrieveInfoTop;
 module.exports.getRelevantInfo = getRelevantInfo;
+module.exports.download = download;
+module.exports.createfolder = createfolder;

@@ -21,24 +21,36 @@ async function retrieveWatchedSubs(client){
     //Has to send the info to the UI and refresh
 }
 
+//El mismo envio puede ser procesado varias veces, si es el 2º con mas puntuacion nunca tendra 25 por delante, con lo que entrara constantemente.
+//Si el envio ya existe, en lugar de ser introducido, deberia actualizar la entrada ya existente.
+
+
 async function rankSubmission(client, infoArray){
     database = client.db("RedditArchive");
     collection = database.collection("saved_submissions");
-    //Do this, turn them into an array
-    cursor = collection.find( {"display_name": infoArray[0], "timeframe": infoArray[3], "score": {$gte:infoArray[2]}});
-    array = await cursor.toArray();
-    if(array.length<25){
-        //insert the post, if there are more than 25 posts for that sub and timeframe remove the last.
-        collection.insertOne({"display_name":infoArray[0], "post_url": infoArray[1], "score": infoArray[2], "timeframe": infoArray[3], "weekNo": infoArray[4], "mod5":infoArray[5]})
-        .then(async function(){
-            topsubm = collection.find({"display_name": infoArray[0], "timeframe": infoArray[3]}).sort({"score":1});
-            result = await topsubm.toArray();
-            //console.log(result);
+    //This checks if the submission is already in the database. just update the score if it's already there
+    cursor = await collection.findOne({"post_url": infoArray[1]}).then(async function(result){
+        if(result!=null){
+            collection.updateOne({"post_url": infoArray[1]}, {$set: {score: infoArray[2]}})
+        }else{//Otherwise, add it to the list and remove the 26th result.
+            //Do this, turn them into an array
+            cursor = collection.find( {"display_name": infoArray[0], "timeframe": infoArray[3], "score": {$gte:infoArray[2]}});
+            array = await cursor.toArray();
+            if(array.length<25){
+                //insert the post, if there are more than 25 posts for that sub and timeframe remove the last.
+                collection.insertOne({"display_name":infoArray[0], "post_url": infoArray[1], "score": infoArray[2], "timeframe": infoArray[3], "timeReference": infoArray[4], "mod5":infoArray[5]})
+                .then(async function(){
+                    topsubm = collection.find({"display_name": infoArray[0], "timeframe": infoArray[3]}).sort({"score":1});
+                    result = await topsubm.toArray();
+                })
+            }
+        }
     })
-    return 1;
-    }
 }
 
+async function getAllSubmissions(){
+    
+}
 module.exports.addToWatch = addToWatch;
 module.exports.removeFromWatch = removeFromWatch;
 module.exports.retrieveWatchedSubs = retrieveWatchedSubs;

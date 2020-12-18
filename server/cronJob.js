@@ -10,7 +10,6 @@ const model = require('../server/model.js');
 
 var CronJob = require('cron').CronJob;
 //Each hour, check the monitored subreddits in their respective timeframes and get their submissions, ranking them.
-
 var rankTheSubs = new CronJob('*/10 * * * * *', function() {
     DBfunctions.retrieveWatchedSubs(client).then(function(result){//Fetches the subs watched from the database and their respective timeframes 
       for(i=0;i<result.length;i++){
@@ -25,10 +24,7 @@ var rankTheSubs = new CronJob('*/10 * * * * *', function() {
 }
   , null, true, 'Europe/Madrid');
 
-//Each day, remove the submissions from the archives if they are not in the top25 score
-
 //Each day, download and organize the top25
-
 
 
 rankTheSubs.start();
