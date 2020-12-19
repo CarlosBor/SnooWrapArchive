@@ -48,13 +48,19 @@ async function rankSubmission(client, infoArray){
     })
 }
 
-async function getAllSubmissions(){
-    
+async function getAllSubmissions(client){
+    database = client.db("RedditArchive");
+    collection = database.collection("saved_submissions");
+    cursor = collection.find({"saved":null});
+    array = await cursor.toArray();
+    return array;
 }
+
 module.exports.addToWatch = addToWatch;
 module.exports.removeFromWatch = removeFromWatch;
 module.exports.retrieveWatchedSubs = retrieveWatchedSubs;
 module.exports.rankSubmission = rankSubmission;
+module.exports.getAllSubmissions = getAllSubmissions;
 
 /*
 {

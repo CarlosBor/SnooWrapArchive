@@ -26,7 +26,7 @@ const snoo = new snoowrap({
   });
 
   //Downloads a single piece of media to the path from the url.
-const download = (url, path, callback) =>{
+const download = (url, path) =>{
     request.head(url, (err, res, body)=>{
         //Regex to get the trailing .jpg/.png from the url, returns(stops the function) if format is too long (not an image)
         let regex = /.*\/(.*)/;
@@ -36,17 +36,17 @@ const download = (url, path, callback) =>{
         }
         request(url)
         .pipe(fs.createWriteStream(path+extension))
-        .on('close', callback);
+        .on('close', ()=>{console.log("download successful")});
     })
 }
 
 //Simply makes a folder, proper way is to try it and skip if error happens, apparently.
 function createfolder(path, callback){
-    fs.mkdir(path,(err)=>{
+    fs.mkdir(path,{ recursive: true }, (err)=>{
         if(err){
             if (err.code== 'EEXIST') callback(null);
             else callback(err);
-        } else callback(null);
+        } //else callback(null);
     })
 }
 
