@@ -31,8 +31,6 @@ async function downloadTop(subName, timeframe){
     console.log(getRelevantInfo(posts[0],timeframe));
 }
 
-downloadTop("anime_irl", "year");
-
 Date.prototype.getISOWeek = function() {
     var date = new Date(this.getTime());
     date.setHours(0, 0, 0, 0);
@@ -64,3 +62,12 @@ function getRelevantInfo(post, timeframe){
         return [post.subreddit.display_name, post.url, post.score, year, urlMD5];
     }
 }
+
+async function retrieveInfoTop(subName, timeframe){
+    var posts = await snoo.getSubreddit(subName).getTop(timeframe);
+    return [posts, timeframe];
+}
+
+retrieveInfoTop("anime_IRL",{time:"week"}).then(function(info){
+    console.log(info[0][0].url);
+});
