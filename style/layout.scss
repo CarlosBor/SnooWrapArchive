@@ -1,0 +1,45 @@
+body{
+    background-color: $black;
+}
+
+#title{
+    color:$green;
+}
+
+#info{
+    background-color: $dgreen;
+    color:$green;
+}
+
+#commandInput{
+    background-color: $dgreen;
+    color:$green;
+    border-width:0;
+}
+
+#rSlash{
+    color:$green;
+}
+
+#archivedSubsList{
+    color:$green;
+}
+
+.subListing{
+    display:flex;
+}
+
+.subNameDiv{
+    width:200px;
+}
+
+.timeFrameDiv{
+    width:200px;
+}
+
+.removeDiv{
+    width:12px;
+    background-color:$red;
+    border-radius:5px;
+    border:solid;
+}
