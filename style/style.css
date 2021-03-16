@@ -1,50 +1,48 @@
-*{
-    margin:0;
-    padding:0;
-}
+* {
+  margin: 0;
+  padding: 0; }
 
-body{
-    background-color:#181a1b;
-}
+body {
+  background-color: #0D0A0B; }
 
-#title{
-    color:#999999;
-}
+#title {
+  color: #A6EBC9; }
 
-#info{
-    background-color: #555555;
-    color:#CCCCCC;
-}
+#info {
+  background-color: #4E6E58;
+  color: #A6EBC9; }
 
-#commandInput{
-    background-color: #555555;
-    color:#CCCCCC;
-    border-width:0;
-}
+#commandInput {
+  background-color: #4E6E58;
+  color: #A6EBC9;
+  border-width: 0; }
 
-#rSlash{
-    color:#999999;
-}
+#rSlash {
+  color: #A6EBC9; }
 
-#archivedSubsList{
-    color:#999999;
-}
+#archivedSubsList {
+  color: #A6EBC9; }
 
-.subListing{
-    display:flex;
-}
+.subListing {
+  display: flex; }
 
-.subNameDiv{
-    width:200px;
-}
+.subNameDiv {
+  width: 200px; }
 
-.timeFrameDiv{
-    width:200px;
-}
+.timeFrameDiv {
+  width: 200px; }
 
-.removeDiv{
-    width:12px;
-    background-color:red;
-    border-radius:5px;
-    border:solid;
-}
+.removeDiv {
+  width: 12px;
+  background-color: #FF4000;
+  border-radius: 5px;
+  border: solid; }
+
+button {
+  background: #4E6E58;
+  color: #A6EBC9;
+  border: 0;
+  padding: 1em;
+  font-size: 1rem; }
+
+/*# sourceMappingURL=style.css.map */
