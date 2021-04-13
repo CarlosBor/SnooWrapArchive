@@ -52,12 +52,23 @@ button{
 
 #archivedSubsList{
     color:$green;
+
 }
 
 
 .removeDiv{
-    width:12px;
+    width:20px;
+    height:20px;
     background-color:$red;
     border-radius:5px;
     border:solid;
+    background-image:url("icon/PaperBin.png");
+    background-size:100%;
+    background-repeat:no-repeat;
+    cursor:pointer;
+}
+
+#explanatoryHeader{
+    color:$green;
+    text-decoration: underline;
 }

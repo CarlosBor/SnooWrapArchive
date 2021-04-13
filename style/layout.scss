@@ -2,14 +2,14 @@
     height:500px;
     display:grid;
     grid-template-columns: 30% 40% 30%;
-    grid-template-rows: 30% 30% 30% 10%;
+    grid-template-rows: 25% 25% 25% 5% 20%;
 }
 
 #titleDiv{
     grid-column-start:2;
     grid-column-end:3;
-    grid-row-start:1;
     grid-row-start:2;
+    grid-row-end:3;
 }
 
 #title{
@@ -21,8 +21,8 @@
 #inputDiv{
     grid-column-start:2;
     grid-column-end:3;
-    grid-row-start:2;
     grid-row-start:3;
+    grid-row-end:4;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -31,18 +31,29 @@
 #archivedSubsList{
     grid-column-start:2;
     grid-column-end:3;
-    grid-row-start:3;
-    grid-row-start:4;
+    grid-row-start:5;
+    grid-row-end:6;
+    display:flex;
+    justify-content:center;
 }
 
 .subListing{
     display:flex;
 }
 
-.subNameDiv{
-    width:200px;
+#explanatoryHeader{
+    grid-column-start:2;
+    grid-column-end:3;
+    grid-row-start:4;
+    grid-row-end:5;
+    display:flex;
+    justify-content:space-around;   
 }
 
-.timeFrameDiv{
-    width:200px;
+.subListing{
+    justify-content:space-around;
+}
+
+#subListParent{
+    width:100%;
 }

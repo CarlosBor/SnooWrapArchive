@@ -120,6 +120,7 @@ function refreshSubs(subInfo){
  document.querySelector("#archivedSubsList").innerHTML = "";
    //Parent div
    subListing = document.createElement("div");
+   subListing.setAttribute("id", "subListParent");
    for(i=0; i<subInfoDB.length; i++){
         rowDiv = document.createElement("div");
         rowDiv.classList.add("subListing");
@@ -135,6 +136,7 @@ function refreshSubs(subInfo){
         //removediv doesn't have content but an ID and eventhandler instead
         //Check the result of this, then later add the removal functionality.
         removeDiv.setAttribute("id", subInfoDB[i].subredditName + " " + subInfoDB[i].subredditTime);
+        removeDiv.setAttribute("title", "Delete");
         removeDiv.addEventListener("click", function(){removeSubDB(this.id)});
         rowDiv.appendChild(subNameDiv);
         rowDiv.appendChild(timeFrameDiv);
