@@ -1,7 +1,63 @@
+body{
+    background-color: $black;
+}
+
+#title{
+    color:$green;
+}
+
 button{
     background:$dgreen;
     color:$green;
     border:0;
-    padding:1em;
-    font-size:1rem;
+    padding:6px;
+    font-size:24px;
+    height:41px;
+}
+
+#info{
+    background-color: $dgreen;
+    color:$green;
+}
+
+#commandInput{
+    background-color: $dgreen;
+    color:$green;
+    border-width:0;
+    height:41px;
+    font-size:30px;
+}
+
+#subTime{
+    height:41px;
+    width:70px;
+    border:none;
+    background-color:$dgreen;
+    color:$green;
+    border-color:$dgreen;
+    appearance:none;
+    background-image: url("icon/DropdownArrow.png");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+    background-size:50%;
+}
+
+
+
+#rSlash{
+    color:$green;
+    font-size:41px;
+}
+
+#archivedSubsList{
+    color:$green;
+}
+
+
+.removeDiv{
+    width:12px;
+    background-color:$red;
+    border-radius:5px;
+    border:solid;
 }

@@ -1,28 +1,38 @@
-body{
-    background-color: $black;
+#titleContainer{
+    height:500px;
+    display:grid;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-rows: 30% 30% 30% 10%;
+}
+
+#titleDiv{
+    grid-column-start:2;
+    grid-column-end:3;
+    grid-row-start:1;
+    grid-row-start:2;
 }
 
 #title{
-    color:$green;
+    font-size:xxx-large;
+    display:flex;
+    justify-content:center;
 }
 
-#info{
-    background-color: $dgreen;
-    color:$green;
-}
-
-#commandInput{
-    background-color: $dgreen;
-    color:$green;
-    border-width:0;
-}
-
-#rSlash{
-    color:$green;
+#inputDiv{
+    grid-column-start:2;
+    grid-column-end:3;
+    grid-row-start:2;
+    grid-row-start:3;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 #archivedSubsList{
-    color:$green;
+    grid-column-start:2;
+    grid-column-end:3;
+    grid-row-start:3;
+    grid-row-start:4;
 }
 
 .subListing{
@@ -35,11 +45,4 @@ body{
 
 .timeFrameDiv{
     width:200px;
-}
-
-.removeDiv{
-    width:12px;
-    background-color:$red;
-    border-radius:5px;
-    border:solid;
 }
