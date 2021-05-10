@@ -11,7 +11,7 @@ const model = require('../server/model.js');
 
 var CronJob = require('cron').CronJob;
 //Each hour, check the monitored subreddits in their respective timeframes and get their submissions, ranking them.
-var rankTheSubs = new CronJob('0 0 */1 * * *', async function() {
+var rankTheSubs = new CronJob('0 */5 */1 * * *', async function() {
   DBfunctions.retrieveWatchedSubs(client).then(function(result){//Fetches the subs watched from the database and their respective timeframes 
     for(i=0;i<result.length;i++){
       model.retrieveInfoTop(result[i].subredditName, {time:result[i].subredditTime}).then(function(infoTop){ //Gets the current top25 submissions from those subs and those timeframes
@@ -26,7 +26,7 @@ var rankTheSubs = new CronJob('0 0 */1 * * *', async function() {
 , null, true, 'Europe/Madrid');
 
 //Each day, download and organize the top25
-var downloadTheImages = new CronJob('0 0 */1 * * *', async function(){
+var downloadTheImages = new CronJob('0 */5 */1 * * *', async function(){
     submissions = await DBfunctions.getAllSubmissions(client).then(function(submissions){
       for(i=0;i<submissions.length;i++){
         console.log(submissions[i]);
