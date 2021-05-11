@@ -39,6 +39,12 @@
 .subListing {
   display: flex; }
 
+.subNameDiv {
+  width: 100px; }
+
+.timeFrameDiv {
+  width: 40px; }
+
 #explanatoryHeader {
   grid-column-start: 2;
   grid-column-end: 3;
@@ -86,7 +92,7 @@ button {
   color: #A6EBC9;
   border-color: #4E6E58;
   appearance: none;
-  background-image: url("icon/DropdownArrow.png");
+  background-image: url("icon/DropdownArrow.svg");
   background-repeat: no-repeat;
   background-position-x: 100%;
   background-position-y: 50%;
@@ -105,7 +111,7 @@ button {
   background-color: #FF4000;
   border-radius: 5px;
   border: solid;
-  background-image: url("icon/PaperBin.png");
+  background-image: url("icon/PaperBin.svg");
   background-size: 100%;
   background-repeat: no-repeat;
   cursor: pointer; }
