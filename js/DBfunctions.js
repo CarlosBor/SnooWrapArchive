@@ -37,8 +37,11 @@ async function rankSubmission(client, infoArray){
             cursor = collection.find( {"display_name": infoArray[0], "timeframe": infoArray[3], "score": {$gte:infoArray[2]}});
             array = await cursor.toArray();
             if(array.length<25){
+                //pruning post names in order to prevent filename problems later on
+                regex = /[\\\/:\*\?\"\<\>\|]/g;
+                postname = infoArray[6].replace(regex,"");
                 //insert the post, if there are more than 25 posts for that sub and timeframe remove the last.
-                collection.insertOne({"display_name":infoArray[0], "post_url": infoArray[1], "score": infoArray[2], "timeframe": infoArray[3], "timeReference": infoArray[4], "mod5":infoArray[5]})
+                collection.insertOne({"display_name":infoArray[0], "post_url": infoArray[1], "score": infoArray[2], "timeframe": infoArray[3], "timeReference": infoArray[4], "mod5":infoArray[5], "postname":postname})
                 .then(async function(){
                     topsubm = collection.find({"display_name": infoArray[0], "timeframe": infoArray[3]}).sort({"score":1});
                     result = await topsubm.toArray();

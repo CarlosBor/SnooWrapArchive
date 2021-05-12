@@ -29,9 +29,10 @@ var rankTheSubs = new CronJob('0 */5 */1 * * *', async function() {
 var downloadTheImages = new CronJob('0 */5 */1 * * *', async function(){
     submissions = await DBfunctions.getAllSubmissions(client).then(function(submissions){
       for(i=0;i<submissions.length;i++){
+        console.log(submissions);
         console.log(submissions[i]);
         model.createfolder("..\\downloads\\"+submissions[i].display_name+"\\"+submissions[i].timeframe.time+"\\"+submissions[i].timeReference, console.log);
-        model.download(submissions[i].post_url,"..\\downloads\\"+submissions[i].display_name+"\\"+submissions[i].timeframe.time+"\\"+submissions[i].timeReference+"\\"+i)
+        model.download(submissions[i].post_url,"..\\downloads\\"+submissions[i].display_name+"\\"+submissions[i].timeframe.time+"\\"+submissions[i].timeReference+"\\"+submissions[i].postname)
       }
       console.log("Turns out it works");
     })

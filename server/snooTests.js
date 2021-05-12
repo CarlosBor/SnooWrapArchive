@@ -71,3 +71,7 @@ async function retrieveInfoTop(subName, timeframe){
 retrieveInfoTop("anime_IRL",{time:"week"}).then(function(info){
     console.log(info[0][0].url);
 });
+
+retrieveInfoTop("pics", {time:"week"}).then(function(result){
+    console.log(result[0][0].title);
+})

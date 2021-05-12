@@ -55,18 +55,17 @@ function getRelevantInfo(post, timeframe){
     creationDate = post.created*1000;
     //MD5 from URL, just to get an unique identifier, will be used for sorting.
     urlMD5 = md5(post.url);
-    
     if (timeframe.time=="week"){
         isoWeek = new Date(creationDate).getISOWeek();
-        return [post.subreddit.display_name, post.url, post.score, timeframe, isoWeek, urlMD5];
+        return [post.subreddit.display_name, post.url, post.score, timeframe, isoWeek, urlMD5, post.title];
     }
     if (timeframe.time=="month"){
         month = new Date(creationDate).getMonth();
-        return [post.subreddit.display_name, post.url, post.score, timeframe, month, urlMD5];
+        return [post.subreddit.display_name, post.url, post.score, timeframe, month, urlMD5, post.title];
     }
     if (timeframe.time=="year"){
         year = new Date(creationDate).getFullYear();
-        return [post.subreddit.display_name, post.url, post.score, timeframe, year, urlMD5];
+        return [post.subreddit.display_name, post.url, post.score, timeframe, year, urlMD5, post.title];
     }
 }
 
